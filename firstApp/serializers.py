@@ -4,7 +4,8 @@ from .models import Student
 class StudentModelSerializer(serializers.ModelSerializer):
     class Meta:
         model=Student
-        fields="['id', 'first_name', 'last_name', 'email', 'address', 'phone_number' ]"
+        fields=['id', 'first_name', 'last_name', 'email', 'address', 'phone_number' ]
+
 class StudentSerializer(serializers.Serializer):
     GENDER_CHOICES = (
         ('male', 'male'),	

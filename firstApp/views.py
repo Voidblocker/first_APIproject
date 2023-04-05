@@ -2,10 +2,30 @@ from django.shortcuts import render
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,generics
 from .models import Student
 from .serializers import StudentSerializer,StudentModelSerializer
 # Create your views here.
+
+class StudentListView(generics.ListAPIView):
+    queryset=Student.objects.all()
+    serializer_class=StudentModelSerializer
+
+class StudentListCreateView(generics.CreateAPIView):
+    queryset=Student.objects.all()
+    serializer_class=StudentModelSerializer
+
+    
+    def get_queryset(self):
+        return self.queryset.filter(email__icontains="yahoo")
+
+class GraduatingStudents(generics.GenericAPIView):
+    serializer_class=StudentModelSerializer
+    queryset=Student.objects.all()
+    def get(self, request, *args , **kwargs):
+        query_set=self.get_queryset().filter(email__icontains="gmail")
+        serializer=self.serializer_class(query_set, many=True)
+        return Response({'message':'getting graduating students','data':serializer.data},status=status.HTTP_200_OK)
 
 class StudentList(APIView):
     # def get (self, request, *args , **kwargs):
